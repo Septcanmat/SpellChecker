@@ -1,0 +1,83 @@
+/*	SpellChecker
+ *	Written by Matthew Schmeiser, April 2017
+ *	For Jean-Francois St-Amand, Lockheed Martin
+ *	As part of job application process
+ */
+ 
+ Note about input:
+ 	Input is restricted to .txt files. Furthermore, a very specific format for dictionary files is
+ 	expected; specifically, a dictionary file is a text file where every dictionary entry is on a
+ 	new line. Note that this allows for some multi-word entries (such as 'a lot' - this was done
+ 	so that, in future, implementing text correction suggestions based on Levenshtein distances would
+ 	be easier). Text to be spell checked can have any formatting so long as it is a txt file. Also,
+ 	the application does nothing to verify the format of the dictionary file, it simply assumes it is
+ 	well-formatted. Files that don't conform to the expectation won't crash the program, but will result
+ 	in a dictionary that's useless to spell check against.
+ 
+ 
+ Things to improve if more time were invested:
+ 	Unit Tests
+		The unit testing on this is somewhat lacking. First of all, the GUI isn't tested at all. Only the data
+		model (SpellChecker.java) is tested, and the test suite definitely isn't complete. Also, some of the
+		tests couple too many individual checks together, instead of each testing a simple, single case.
+		For the scope of this code that's not a huge concern, but decoupling the unit tests would be
+		valuable if the code were going to continue to be worked on, because it would give the developer
+		more specific information as to what parts of the logic are and aren't working.
+ 		
+ 	Exception Catching
+ 		Due to the scope of this application, it wasn't made to be particularly resilient. There are two
+ 		exceptions that may be thrown; I/O exceptions regarding loading and saving the files, and a
+ 		timeout exception on the spell check itself. Both of these exceptions, if thrown, simply result
+ 		in a system exit call, rather than trying to recover in any way. The system also shuts down if
+ 		a switch-statement passes execution to the 'default' branch, which should never happen.
+ 		
+ 	Thread Management
+ 		Currently the application creates and destroys the threads on every invokation of the spell check
+ 		method. This produces a lot of unnecessary overhead when these threads could be created once and
+ 		kept until the application ended. However, there are also simply too many threads for any practicle
+ 		implementation of this code. As per the design parameters, each word is checked in parallel, meaning
+ 		there is one thread per word. But this results in more threads than most computers have cores, and it
+ 		means that the overhead of thread management dwarfs the actual parallelized task of checking spellings.
+ 		Ideally the code should instantiate a handful of threads, and divide up the document accordingly. This
+ 		would make it easier to only instantiate the threads once and know that you have the correct number (as
+ 		opposed to needing to have one thread per word every time), and reduce the ratio of overhead to task.
+ 		
+ 	Spelling of Corrections
+ 		As it stands, the program doesn't bother to verify the spelling of corrections provided by the user.
+ 		It's simply assumed that the user's corrections were spelled properly. However, the spell checker
+ 		can be run a second time on the newly modified text as a check.
+ 	
+ 	Communicating Behavior to the User
+ 		Many of the buttons are non-functional until certain conditions are met. An example would be that
+ 		'Check Spelling' does nothing if there's no text loaded.  While useful in that it prevents the
+ 		program from trying to spell check a null string or save nothing to disk, the program does nothing
+ 		to explain why the button is unresponsive to the user.
+ 			
+ 	Capitalization
+ 		The program currently checks to see if a word starts with a capital followed by zero or more lower case
+ 		letters, and if it does, it capitalizes the first letter of the new spelling. This was done so that in the
+ 		case where a misspelling was found at the beginning of a sentence, the user wouldn't need to realize that
+ 		and capitalize their corrected spelling accordingly. The dictionary shifts all uppercase characters to
+		lowercase ones, which could lead to issues with proper nouns. No further work was done on proper capitalization
+		because language is exceedingly complicated and covering all of the nuances and rules of capitalization
+		was beyond the scope of this project. 
+ 
+ Features That Could Be Added In The Future
+ 	Dictionary Editing
+ 		Being able to modify the dictionary would be a helpful feature. This could be done either by editing it
+ 		directly, or by adding unrecognized spellings into the dictionary.
+ 		The most complicated aspect of this would be - if you add an unrecognized spelling into the
+ 		dictionary, every misspelling after that should be checked again against the newly added
+ 		dictionary entry.
+ 		
+ 	Spelling Suggestions
+ 		Instead of necessarily requiring the user to type in corrected spelling, being able to
+ 		suggest potential correct spellings from the dictionary (based on, for example, their Levenshtein
+ 		distance), would be a valuable feature in a spell checker.
+ 		
+ 	In-App Text Editing
+ 		Currently, the text to be spell checked must be loaded in from an external file. It would be a
+ 		simple matter of making the text area editable though, and then text could be written directly
+ 		inside the application.
+		This of course starts turning the application from a simple spell checker into a text editor
+		with spell-checking capabilities.

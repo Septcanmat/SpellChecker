@@ -1,0 +1,5 @@
+Teh quick brown fox jumped over the lazy dog.
+The quck brown fox jumped over the lazy dgo?!
+Apostrophes shouldn't not be included.
+Periods aren't always at end of line. Sometimes they're in the middle.
+Alot trips people up a lot of the time.
