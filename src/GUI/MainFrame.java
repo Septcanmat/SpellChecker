@@ -6,7 +6,6 @@
 
 package GUI;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -22,7 +21,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -66,8 +64,6 @@ public class MainFrame {
 	private File inputTextFile;
 
 	public MainFrame(SpellChecker sc) {
-		boolean showBorders = false; // *******************
-
 		spellChecker = sc;
 
 		frame = new JFrame("MSchmeiser Spell Checker");
@@ -77,7 +73,7 @@ public class MainFrame {
 
 		listener = new MainFrameListener();
 
-		JPanel mainPanel = mainPanel(showBorders);
+		JPanel mainPanel = mainPanel();
 		frame.add(mainPanel);
 		frame.setMinimumSize(FrameMinSize);
 	}
@@ -90,18 +86,16 @@ public class MainFrame {
 		frame.setVisible(b);
 	}
 
-	private JPanel mainPanel(boolean showBorders) {
+	private JPanel mainPanel() {
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		if (showBorders)
-			mainPanel.setBorder(BorderFactory.createLineBorder(Color.black)); // *******************
 		mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
-		JPanel selectFilesPanel = selectFilesPanel(showBorders);
+		JPanel selectFilesPanel = selectFilesPanel();
 		mainPanel.add(selectFilesPanel);
 		mainPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
-		JPanel contentPanel = contentPanel(showBorders);
+		JPanel contentPanel = contentPanel();
 		mainPanel.add(contentPanel);
 
 		JPanel closeButtonPanel = closeButtonPanel();
@@ -109,12 +103,10 @@ public class MainFrame {
 		return mainPanel;
 	}
 	
-	private JPanel selectFilesPanel(boolean showBorders) {
+	private JPanel selectFilesPanel() {
 		JPanel selectFilesPanel = new JPanel();
 		selectFilesPanel.setLayout(new GridBagLayout());
 		selectFilesPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		if (showBorders)
-			selectFilesPanel.setBorder(BorderFactory.createLineBorder(Color.blue)); // *******************
 		selectFilesPanel.setMinimumSize(SelectFilesPanelMinSize);
 		selectFilesPanel.setMaximumSize(SelectFilesPanelMaxSize);
 		
@@ -141,12 +133,10 @@ public class MainFrame {
 		return selectFilesPanel;
 	}
 	
-	private JPanel contentPanel(boolean showBorders) {
+	private JPanel contentPanel() {
 		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(new GridBagLayout());
 		contentPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		if (showBorders)
-			contentPanel.setBorder(BorderFactory.createLineBorder(Color.red)); // *******************
 		
 		JLabel inputLabel = new JLabel("Text");
 		contentPanel.add(inputLabel, inputLabelConstraints());
